@@ -9,3 +9,7 @@ variable "vpc_id" {
 variable "cluster_name" {
   description      =   "put your cluster name here"
 }
+
+variable "fargate_profile_arn" {
+  
+}

@@ -34,19 +34,6 @@ module "kubernetes" {
     cluster_id                          =  module.eks.cluster_id    
     vpc_id                              =  module.vpc.vpc_id
     cluster_name                        =  module.eks.cluster_name
-}
-
-module "database" {
-    source                              =  "./database"
-    secret_id                           =  var.secret_id
-    identifier                          =  var.identifier
-    allocated_storage                   =  var.allocated_storage
-    storage_type                        =  var.storage_type
-    engine                              =  var.engine
-    engine_version                      =  var.engine_version
-    instance_class                      =  var.instance_class
-    database_name                       =  var.database_name
-    environment                         =  var.environment
-    vpc_id                              =  module.vpc.vpc_id
-    private_subnets                     =  module.vpc.aws_subnets_private
+    fargate_profile_arn                 =  module.eks.fargate_profile_arn
+    #depends_on = [ module.eks ]
 }
