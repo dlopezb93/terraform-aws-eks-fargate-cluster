@@ -1,4 +1,4 @@
-environment                  = "Production"
+environment                  =  "prd"
 cluster_name                 =  "main"
 vpc_cidr                     =  "192.168.0.0/16"
 vpc_name                     =  "main"

@@ -1,4 +1,6 @@
 variable "environment" {}
+variable "environment_prd" {}
+variable "environment_stg" {}
 variable "cluster_name" {}
 variable "vpc_cidr" {}
 variable "vpc_name" {}

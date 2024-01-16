@@ -18,10 +18,20 @@ module "vpc" {
 }
 
 
-module "eks" {
+module "eks-stg" {
     source                              =  "./eks"
     cluster_name                        =  var.cluster_name
-    environment                         =  var.environment
+    environment                         =  var.environment_stg
+    eks_node_group_instance_types       =  var.eks_node_group_instance_types
+    private_subnets                     =  module.vpc.aws_subnets_private
+    public_subnets                      =  module.vpc.aws_subnets_public
+    fargate_namespace                   =  var.fargate_namespace
+}
+
+module "eks-prd" {
+    source                              =  "./eks"
+    cluster_name                        =  var.cluster_name
+    environment                         =  var.environment_prd
     eks_node_group_instance_types       =  var.eks_node_group_instance_types
     private_subnets                     =  module.vpc.aws_subnets_private
     public_subnets                      =  module.vpc.aws_subnets_public
@@ -29,11 +39,20 @@ module "eks" {
 }
 
 
-module "kubernetes" {
+module "kubernetes-stg" {
     source                              =  "./kubernetes"
-    cluster_id                          =  module.eks.cluster_id    
+    cluster_id                          =  module.eks-stg.cluster_id    
     vpc_id                              =  module.vpc.vpc_id
-    cluster_name                        =  module.eks.cluster_name
-    fargate_profile_arn                 =  module.eks.fargate_profile_arn
+    cluster_name                        =  module.eks-stg.cluster_name
+    fargate_profile_arn                 =  module.eks-stg.fargate_profile_arn
+    #depends_on = [ module.eks ]
+}
+
+module "kubernetes-prd" {
+    source                              =  "./kubernetes"
+    cluster_id                          =  module.eks-prd.cluster_id    
+    vpc_id                              =  module.vpc.vpc_id
+    cluster_name                        =  module.eks-prd.cluster_name
+    fargate_profile_arn                 =  module.eks-prd.fargate_profile_arn
     #depends_on = [ module.eks ]
 }

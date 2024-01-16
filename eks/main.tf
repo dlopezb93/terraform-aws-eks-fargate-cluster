@@ -22,7 +22,7 @@ resource "aws_eks_cluster" "eks_cluster" {
 }
 
 resource "aws_iam_policy" "AmazonEKSClusterCloudWatchMetricsPolicy" {
-  name   = "AmazonEKSClusterCloudWatchMetricsPolicy"
+  name   = "AmazonEKSClusterCloudWatchMetricsPolicy-${var.environment}"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -48,7 +48,7 @@ resource "aws_eks_addon" "coredns" {
 
 
 resource "aws_iam_role" "eks_cluster_role" {
-  name = "${var.cluster_name}-cluster-role"
+  name = "${var.cluster_name}-${var.environment}-cluster-role"
   description = "Allow cluster to manage node groups, fargate nodes and cloudwatch logs"
   force_detach_policies = true
   assume_role_policy = <<POLICY
@@ -122,7 +122,7 @@ resource "aws_eks_fargate_profile" "eks_fargate" {
 }
 
 resource "aws_iam_role" "eks_fargate_role" {
-  name = "${var.cluster_name}-fargate_cluster_role"
+  name = "${var.cluster_name}-${var.environment}-fargate_cluster_role"
   description = "Allow fargate cluster to allocate resources for running pods"
   force_detach_policies = true
   assume_role_policy = <<POLICY
